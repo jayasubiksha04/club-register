@@ -19,7 +19,7 @@ reg_no = st.text_input("Register Number")
 email = st.text_input("Email")
 mobile = st.text_input("Mobile Number")
 
-gender = st.radio("Gender", ["Male", "Female", "Other"], horizontal=True)
+gender = st.radio("Gender", ["Male", "Female"], horizontal=True)
 
 stay_type = st.radio("Stay Type", ["Hostel", "Day Scholar"], horizontal=True)
 
@@ -65,3 +65,4 @@ if st.button("Submit Registration", type="primary"):
                 st.success("✅ Registration successful! Welcome to the Coding Club 🎉")
             except Exception as e:
                 st.error(f"Something went wrong while saving your data: {e}")
+
