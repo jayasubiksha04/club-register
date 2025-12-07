@@ -1,46 +1,40 @@
-# sheets.py
-
+import streamlit as st
 import gspread
 from google.oauth2.service_account import Credentials
 from datetime import datetime
 
-# Google API scope
+# Google API scopes
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
-    "https://www.googleapis.com/auth/drive",
+    "https://www.googleapis.com/auth/drive"
 ]
 
-# Google Sheet name (must match exactly)
+# Sheet name (must match your Google Sheet EXACTLY)
 SHEET_NAME = "Coding_Club_Registrations"
 
 
 def get_sheet():
     """
-    Connect to Google Sheets and return the first worksheet.
-    Uses service_account.json in the same folder.
+    Connect to Google Sheets using Streamlit secrets.
+    THIS replaces the local service_account.json method.
     """
-    creds = Credentials.from_service_account_file(
-        "service_account.json", scopes=SCOPE
-    )
+    creds_dict = st.secrets["gcp_service_account"]   # get secrets from Streamlit Cloud
+    creds = Credentials.from_service_account_info(creds_dict, scopes=SCOPE)
     client = gspread.authorize(creds)
     sheet = client.open(SHEET_NAME).sheet1
     return sheet
 
 
 def get_all_data():
-    """Return all rows as a list of dicts."""
+    """Return all records from the sheet."""
     sheet = get_sheet()
     return sheet.get_all_records()
 
 
 def is_duplicate(register_no: str) -> bool:
-    """
-    Check if a given Register No already exists in the sheet.
-    Register No column = Column C = index 3.
-    """
+    """Check if register number already exists."""
     sheet = get_sheet()
-    reg_values = sheet.col_values(3)  # C column: Register No
-    # First value is header "Register No", rest are data
+    reg_values = sheet.col_values(3)   # column C = Register No
     return register_no in reg_values
 
 
@@ -56,23 +50,11 @@ def add_student(
     languages: list,
 ):
     """
-    Append a new student row with auto Serial No.
-    Columns:
-    A: Serial No
-    B: Name
-    C: Register No
-    D: Email
-    E: Mobile
-    F: Gender
-    G: Stay Type
-    H: Department
-    I: Interests (comma separated)
-    J: Languages (comma separated)
+    Add a new student row with auto serial number.
     """
-
     sheet = get_sheet()
-    existing_data = sheet.get_all_records()
-    serial_no = len(existing_data) + 1  # auto serial
+    data = sheet.get_all_records()
+    serial_no = len(data) + 1  # auto-increment serial number
 
     interests_str = ", ".join(interests) if interests else ""
     languages_str = ", ".join(languages) if languages else ""
@@ -87,7 +69,7 @@ def add_student(
         stay_type,
         department,
         interests_str,
-        languages_str,
+        languages_str
     ]
 
     sheet.append_row(row)
