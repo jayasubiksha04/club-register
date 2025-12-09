@@ -6,14 +6,14 @@ from sheets import get_all_data
 
 st.set_page_config(page_title="Coding Club Admin", page_icon="🛠️")
 
-st.title("🛠️ Coding Club - Admin Dashboard")
+st.title(" Coding Club - Admin Dashboard")
 
 # (Optional) Simple password protection
-password = st.text_input("Enter admin password", type="password")
-CORRECT_PASSWORD = "club2025"
+password = st.text_input("Enter password", type="password")
+CORRECT_PASSWORD = "club25"
 
 if password != CORRECT_PASSWORD:
-    st.warning("Enter the correct admin password to view data.")
+    st.warning("Enter the correct password to view Registered Members.")
     st.stop()
 
 data = get_all_data()
@@ -22,7 +22,7 @@ if not data:
     st.info("No registrations yet.")
 else:
     df = pd.DataFrame(data)
-    st.subheader("📋 Registered Students")
+    st.subheader(" Registered Coders")
     st.dataframe(df, use_container_width=True)
 
     # Download as CSV
@@ -33,3 +33,4 @@ else:
         file_name="coding_club_registrations.csv",
         mime="text/csv",
     )
+
