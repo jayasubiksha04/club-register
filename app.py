@@ -30,11 +30,11 @@ department = st.selectbox(
 
 interests = st.multiselect(
     "Interests",
-    ["AI", "DSA Problem Solving", "Full Stack", "Others"],
+    ["AI", "DSA Problem Solving", "Others"],
 )
 
 languages = st.multiselect(
-    "Programming Languages",
+    "Known Programming Languages",
     ["Python", "C", "C++", "Java", "HTML/CSS", "Others"],
 )
 
@@ -65,4 +65,5 @@ if st.button("Submit Registration", type="primary"):
                 st.success("✅ Registration successful! Welcome to the Coding Club 🎉")
             except Exception as e:
                 st.error(f"Something went wrong while saving your data: {e}")
+
 
